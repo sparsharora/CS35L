@@ -1,0 +1,243 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf470
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fmodern\fcharset0 Courier;\f2\fnil\fcharset0 Menlo-Regular;
+}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh15040\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 1) First, I made a new directory called gitroot and copied the Diffutils repository into this directory using the command\
+\pard\pardeftab720\sl280\partightenfactor0
+
+\f1 \cf0 \expnd0\expndtw0\kerning0
+git clone git://git.savannah.gnu.org/diffutils.git\
+from the main Savannah repository.\
+\
+2) we use the command as specified\
+git log > git-log.txt\
+\
+3) As in 2,\
+git tag > git-tags.txt\
+\
+4) To search for the required patch, get into git-log.txt and use C-s to search for \'91main: q\'92 to get to the required patch in the file. Copy the commit number. Now exit the file and use the command\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f2\fs22 \cf0 \kerning1\expnd0\expndtw0 \CocoaLigature0 git show 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f > quote_patch.txt\
+\
+where the commit number was found in the log file as explained above and the show command was found and understood by using man git command.
+\f1\fs24 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+\pard\pardeftab720\sl280\partightenfactor0
+\cf0 \
+5) Used the command\
+\
+git checkout v3.0 \
+\
+to checkout the version 3.0 from the repository.\
+\
+6) we use the command \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f2\fs22 \cf0 \kerning1\expnd0\expndtw0 \CocoaLigature0 patch -p1 < quote_patch.txt\
+\
+here we use the pnum option with p1 because there are no directories called a/ or b/ in out file so to skip these in the patch file we use -p1.\
+\
+The output showed that there were multiple hunks and pieces of code where the patch failed. This was probably due to different order of content in the files to be patched so it could not be located or due to small changes in these files trying to be patched.\
+\
+7) use command\
+\
+git status \
+\
+to check progress\
+\
+Output:\
+\
+# Not currently on any branch.\
+# Changed but not updated:\
+#   (use "git add <file>..." to update what will be committed)\
+#   (use "git checkout -- <file>..." to discard changes in working directory)\
+#\
+#	modified:   NEWS\
+#	modified:   README\
+#	modified:   TODO\
+#	modified:   doc/diagmeet.note\
+#	modified:   ms/config.bat\
+#	modified:   ms/config.site\
+#	modified:   po/en.po\
+#	modified:   src/analyze.c\
+#	modified:   src/cmp.c\
+#	modified:   src/context.c\
+#	modified:   src/diff.c\
+#	modified:   src/diff.h\
+#	modified:   src/diff3.c\
+#	modified:   src/dir.c\
+#	modified:   src/ifdef.c\
+#	modified:   src/io.c\
+#	modified:   src/sdiff.c\
+#	modified:   src/side.c\
+#	modified:   src/system.h\
+#	modified:   src/util.c\
+#	modified:   tests/help-version\
+#\
+# Untracked files:\
+#   (use "git add <file>..." to include in what will be committed)\
+#\
+#	NEWS.orig\
+#	README-hacking.orig\
+#	README-hacking.rej\
+#	README.orig\
+#	README.rej\
+#	cfg.mk.orig\
+#	cfg.mk.rej\
+#	git-log.txt\
+#	git-tags.txt\
+#	ms/config.site.orig\
+#	quote_patch.txt\
+#	src/cmp.c.orig\
+#	src/context.c.orig\
+#	src/diff.c.orig\
+#	src/diff.c.rej\
+#	src/diff.h.orig\
+#	src/diff3.c.orig\
+#	src/diff3.c.rej\
+#	src/dir.c.orig\
+#	src/sdiff.c.orig\
+#	src/system.h.orig\
+#	src/util.c.orig\
+#	tests/help-version.orig\
+no changes added to commit (use "git add" and/or "git commit -a")\
+\
+8)9)
+\f1\fs24 \expnd0\expndtw0\kerning0
+\CocoaLigature1  I opened the modified files from the above output using emacs and used the command\
+\
+C-x v u \
+\
+to revert any changes made to these files.\
+\
+For the .c files, I opened them using emacs, looked at the differences using the command\
+\
+C-x v =\
+\
+and then undid the necessary changes by using the command\
+\
+C-u C-c C-a\
+\
+to undo required hunks of code\
+\
+10)Use command\
+\
+\pard\pardeftab720\sl280\partightenfactor0
+\cf0 src/*.c.rej\
+\
+to print out all the changes needed to be made from the rejected file. Now, i manually made these changes to the .c files (in my case, diff.c and diff3.c) from the reject files.\
+\
+11)I removed all the untracked files using the command\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f2\fs22 \cf0 \kerning1\expnd0\expndtw0 \CocoaLigature0 git clean -f\
+\
+and printed output for command \
+\
+git status \
+\
+which shows me\
+\
+# Not currently on any branch.\
+# Changed but not updated:\
+#   (use "git add <file>..." to update what will be committed)\
+#   (use "git checkout -- <file>..." to discard changes in working directory)\
+#\
+#	modified:   src/cmp.c\
+#	modified:   src/diff.c\
+#	modified:   src/diff3.c\
+#	modified:   src/dir.c\
+#	modified:   src/sdiff.c\
+#	modified:   src/util.c\
+#\
+no changes added to commit (use "git add" and/or "git commit -a")
+\f1\fs24 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+\pard\pardeftab720\sl280\partightenfactor0
+\cf0 \
+12) From the above output we see that these are half a dozen files. \
+\
+and then we use the command \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f2\fs22 \cf0 \kerning1\expnd0\expndtw0 \CocoaLigature0 git diff > quote-3.0-patch.txt\
+\
+Just to check, we use \
+\
+git diff | wc -l\
+\
+which prints 326 (this is between 300 and 400 as expected)
+\f1\fs24 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+\pard\pardeftab720\sl280\partightenfactor0
+\cf0 \
+13) Now we use the commands in this order as follows:\
+\
+./bootstrap\
+(gave an error help2man not found)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f2\fs22 \cf0 \kerning1\expnd0\expndtw0 \CocoaLigature0 export PATH=/usr/local/cs/bin:$PATH\
+(used this to correct the error as help2man might have not been in the directory)\
+\
+./configure\
+\
+make\
+\
+make check
+\f1\fs24 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+\
+Next we use the commands\
+\
+diff . - \
+\
+this prints out\
+\
+
+\f2\fs22 \kerning1\expnd0\expndtw0 \CocoaLigature0 diff: cannot compare '-' to a directory \
+\
+(okina is rightly corrected to apostrophe)\
+\
+diff \'97help\
+\
+prints out text where all okinas are replaced by apostrophes as expected.\
+\
+14) We go to the home directory and make 2 new directories diffutils-3.0 and diffutils-3.0-patch using command\
+\
+mkdir\
+\
+Next, we re-clone the original source code using the same steps as that mentioned in answer 1.\
+\
+Now, we checkout v3.0 of this just as we did in answer 5 (in the new directory).\
+\
+Next, we use the command\
+\
+cp diffutils/src/*.c diffutils-3.0\
+\
+to copy original source code to diffutils-3.0 directory and use the command\
+\
+cp gitroot/diffutils/src/*.c diffutils-3.0-patch\
+\
+to copy the new source files to the mentioned directory.\
+\
+Now we run our implementation of the diff command located in src directory using command\
+\
+gitroot/diffutils/src/diff -pru diffutils-3.0 diffutils-3.0-patch >quote-3.0-test.txt\
+\
+15)\
+\
+Finally, to check the differences we use the command ,\
+\
+diff -u quote-3.0-test.txt gitroot/diffutils/quote-3.0-patch.txt\
+\
+This command prints some code (differences) but the difference in code/text doesn\'92t really exist since these differences are only in directories or paths of files and also in some cases the order of content in which it appears. Hence, we notice that our differences are ineffective and do not change anything.}

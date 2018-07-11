@@ -1,0 +1,233 @@
+Setting up ubuntu environment
+
+First we insert the CD given to us and go to BIOS by pressing F2. In
+BIOS, we set CD up on the top and apply and exit.  This takes us onto
+Ubuntu where we choose the “Try Ubuntu” option.
+
+Next we make sure we have the OpenSSH-server and OpenSSH-client
+installed. We do this by using the command,
+
+dpkg --get-selections | grep openssh
+
+which showed me the output:
+
+openssh-client  install
+
+
+As we see, the OpenSSH-server is missing, so I used the command
+
+sudo apt-get install openssh-server
+
+and now we use the same command to check again as mentioned above,
+
+Now I see the output:
+
+openssh-client    install
+openssh-server    install
+
+So we now know that both of the OpenSSH have been installed.
+
+As a server,
+
+I first generate both public and private keys using the command
+
+ssh-keygen
+
+This is saved to the default location i.e. /home/ubuntu/.ssh/id_rsa.
+This produced the following output:
+
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/ubuntu/.ssh/id_rsa): 
+Created directory '/home/ubuntu/.ssh'.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/ubuntu/.ssh/id_rsa.
+Your public key has been saved in /home/ubuntu/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:NkUAaUyqTSwOixZop9b8RoocH8H84/TaCUpxd+KhJd4 ubuntu@ubuntu
+The key's randomart image is:
++---[RSA 2048]----+
+|     ooo...      |
+|. o. .+  .       |
+|oo.=+.    .      |
+|o+*=o    .       |
+|o=o=.B =S.       |
+|+ + @ X.+.       |
+| o + B E         |
+|  . o + .        |
+|   . . o         |
++----[SHA256]-----+
+
+where I used the return key for the inputs asked since we don’t need
+to save it anywhere except the default location and we don’t need to
+set a passphrase.
+
+Now, we strive to create an account for the client on the server and
+for this I used the command
+
+sudo useradd -d /home/garvit -m garvitpugalia
+
+where garvit is the name of the home directory (as mentioned in the
+directory /home/garvit above) and garvitpugalia is the username that I
+set for this account.
+
+Now I set a password for this account using the command
+
+sudo passwd garvitpugalia
+
+This showed me the output:
+
+Enter new UNIX password: 
+Retype new UNIX password: 
+passwd: password updated successfully
+
+where I had to type and retype the password of my choice.
+
+Next we want to form an SSH directory for the new user account we just
+created,
+
+I do this using the command 
+
+cd /home/garvit
+
+to go into the user directory I just created as mentioned above
+
+and then use the command 
+
+sudo mkdir .ssh
+
+to actually make an SSH directory for the user.
+
+Finally, as a server I had to alter the permissions on this account
+and the ssh directory to make it accessible.
+
+For this I used the commands
+
+sudo chown -R garvitpugalia .ssh
+sudo chmod 700 .ssh
+
+where garvitpugalia is the username of the account I made earlier.
+
+For use at a later time,
+
+I use the command
+
+ifconfig
+
+to figure out the IP address of this server
+
+this command displayed the output:
+
+enp0s25 Link encap:Ethernet  HWaddr 34:17:eb:bb:e9:4c  
+ inet addr:10.97.85.157  Bcast:10.97.85.255  Mask:255.255.255.0
+ inet6 addr: fe80::2d1b:ca11:82ac:5354/64 Scope:Link
+ UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+ RX packets:26401 errors:0 dropped:0 overruns:0 frame:0
+ TX packets:15536 errors:0 dropped:0 overruns:0 carrier:0
+ collisions:0 txqueuelen:1000 
+ RX bytes:29207947 (29.2 MB)  TX bytes:1863228 (1.8 MB)
+ Interrupt:20 Memory:fb200000-fb220000 
+
+where inet addr:10.97.85.157 represents the IP address of the server.
+
+That ends our role as a server.
+
+As a client,
+
+I first generated keys using the command
+
+ssh-keygen
+
+This printed the following:
+
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/ubuntu/.ssh/id_rsa): 
+/home/ubuntu/.ssh/id_rsa already exists.
+Overwrite (y/n)? y
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/ubuntu/.ssh/id_rsa.
+Your public key has been saved in /home/ubuntu/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:kkJbL5E3zxKy8B0OaRajeKgJ/41Ilq/TMY/JDb+wtIA ubuntu@ubuntu
+The key's randomart image is:
++---[RSA 2048]----+
+|      o          |
+|   o . =         |
+|. o = X =        |
+|.+ + B @ *       |
+|o = o * S o      |
+| + +++ o .       |
+|E oo*X.          |
+|  .+=++          |
+|  ..o ..         |
++----[SHA256]-----+
+
+Next as a client, I copy my public key to the server to make it
+accessible to my partner (key-based authentication),
+
+I use the command
+
+ssh-copy-id -i sparsharora@10.97.85.136
+
+where sparsh_arora is the username set for me by my host, Garvit and
+10.97.85.136 is garvit’s IP address that he obtained using ifconfig.
+
+This printed:
+
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed:
+"/home/ubuntu/.ssh/id_rsa.pub" 
+/usr/bin/ssh-copy-id: INFO: attempting
+to log in with the new key(s), to filter out any that are already
+installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you
+are prompted now it is to install the new keys
+sparsharora@10.97.85.136's password:
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with: "ssh 'sparsh_arora@10.97.85.136'"
+and check to make sure that only the key(s) you wanted were added.
+
+
+Next, I used the command
+
+ssh-add 
+
+to add my authentication key (private) to my agent (ssh)
+
+This printed:
+
+Identity added: /home/ubuntu/.ssh/id_rsa (/home/ubuntu/.ssh/id_rsa)
+
+Finally I used the command,
+
+ssh -X sparsharora@10.97.85.136
+
+which enabled a network based system that allows the user to run on
+one computer but be displayed on another.
+
+So to check, I used the command
+
+firefox
+
+which opened a firefox window on my window.
+
+When my partner typed in ps aux to check the programs run, it showed,
+that sparsharora (my username) had accesed firefox which means I ran
+firefox on his account.
+
+Similarly, I checked with commands xterm which showed the same
+behaviour as above.
+
+
+
+
+
+
+
+
+
+
+
+

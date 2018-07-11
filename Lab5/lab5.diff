@@ -1,0 +1,20 @@
+2016-10-30  Yash Choudhary  <yashc@lnxsrv03.seas.ucla.edu>
+       * timespec.h: Fixed overflow bugs in timespec_cmp. It	now displays files in sorted order of date
+                     and time.
+--- ./lib/timespec.h	2016-10-30 15:29:24.830886000 -0700
++++ ./lib/timespec.h	2005-09-21 23:05:39.000000000 -0700
+@@ -45,12 +45,8 @@
+ static inline int
+ timespec_cmp (struct timespec a, struct timespec b)
+ {
+-  if(a.tv_sec > b.tv_sec)
+-    return 1;
+-  else if(a.tv_sec < b.tv_sec)
+-    return -1;
+-  else if(a.tv_sec==b.tv_sec)
+-    return 0; 
++  int diff = a.tv_sec - b.tv_sec;
++  return diff ? diff : a.tv_nsec - b.tv_nsec;
+ }
+ 
+ # if ! HAVE_DECL_NANOSLEEP

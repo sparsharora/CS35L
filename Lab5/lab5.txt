@@ -1,0 +1,61 @@
+First I make a new directory to store all my files in: mkdir lab5
+We start off the lab by getting the required version of coreutils from the assignment page:
+wget http://web.cs.ucla.edu/classes/fall16/cs35L/assign/coreutils-with-bug.tar.gz
+tar -xvf coreutils-with-bug.tar.gz
+
+After this we configure and then make the files:
+./configure
+make
+We get an error during the make process:
+
+In file included from utimecmp.c:41:
+utimens.h:2: error: conflicting types for 'futimens'
+/usr/include/sys/stat.h:374: note: previous declaration of 'futimens' was here
+make[3]: *** [utimecmp.o] Error 1
+make[3]: Leaving directory `/w/home.09/cs/ugrad/yashc/lab5/coreutils-with-bug/lib'
+make[2]: *** [all] Error 2
+make[2]: Leaving directory `/w/home.09/cs/ugrad/yashc/lab5/coreutils-with-bug/lib'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/w/home.09/cs/ugrad/yashc/lab5/coreutils-with-bug'
+make: *** [all] Error 2
+
+Thus we are not able to build this version of coreutils as is, we face these errors.
+We now use the renaming patch to fix this error
+wget http://web.cs.ucla.edu/classes/fall16/cs35L/assign/coreutils.diff
+
+We get the coreutils.diff inside coreutils-with-bug and then patch:
+patch -p0 < coreutils.diff
+This gives us:
+patching file lib/utimens.c
+patching file lib/utimens.h
+patching file src/copy.c
+patching file src/tee.c
+patching file src/touch.c
+
+This time we see that there are no errors during make: 
+The patch fixed functions timen and tee to coreutils_timen and coreutils_tee
+Adding the coreutils did what?????
+
+To test the broken ls we create 3 new files similar to the spec, but
+in our SEASnet directory instead of a tmp.
+ 
+touch -d '1918-11-11 11:00 GMT' wwi-armistice
+$ touch now
+$ sleep 1
+$ touch now1
+~/lab5/coreutils-with-bug/src/ls -lt --full-time wwi-armistice now now1
+
+The output we get is faulty:
+-rw-r--r-- 1 yashc csugrad 0 2054-12-17 09:28:16.000000000 -0800 wwi-armistice
+-rw-r--r-- 1 yashc csugrad 0 2016-10-29 16:05:37.242691000 -0700 now1
+-rw-r--r-- 1 yashc csugrad 0 2016-10-29 16:05:29.624552000 -0700 now
+
+The file wwi-armistice appears to be from the future 2054. 
+
+The reason we get 2054 here is because since Unix Epoch all timestamps were represented as seconds.
+Also, the NFS filesystem has unsigned 32-bit time stamps whereas the local Linux server file system
+has signed 32-bit time stamps. Hence touching files on NFS filesystem before 1970(Unix Epoch) will result
+in illegal timestamp, in our case 2054. 
+When we create the $tmp we create a 64 bit timestap but in this case it truncates leading to illegal values 
+The fix to this is to touch files on on local filesystems so that files are not misinterpreted. 
+

@@ -1,0 +1,60 @@
+First I ran the command
+sort --version
+to check the version of sort. This showed me a version of sort (GNU
+coreutils) 8.4 This is not the version we needed.
+
+I exported path using
+
+export PATH=/usr/local/cs/bin:$PATH
+
+When I ran the version command again,
+
+I got sort (GNU coreutils) 8.24
+
+which is right.
+
+Next I used the command
+
+od -An -t f -N 80000000 < /dev/urandom | tr -s ' ' '\n' > random.txt
+
+to create a file random.txt that creates 10 million random floating
+point numbers.
+
+-An option was used to get rid of all the addresses that appeared at
+ the start of each line
+
+-t f was used to generate double precision floating point numbers.
+
+-N 80000000 was used to create a file with 80 million bites since we
+ need 10 million floating point numbers with double precision. Since
+ it has a size of 8 bytes, we have 80 million used with -N.
+
+Next to evaluate performance, we use the following commands that give
+the respective outputs:
+
+time -p sort -g --parallel=1 random.txt > /dev/null
+
+real 177.19
+user 176.97
+sys 0.23
+
+time -p sort -g --parallel=2 random.txt > /dev/null
+
+real 94.27
+user 180.31
+sys 0.25
+
+time -p sort -g --parallel=4 random.txt > /dev/null
+
+real 54.49
+user 184.34
+sys 0.80
+
+time -p sort -g --parallel=8 random.txt > /dev/null
+
+real 41.11
+user 206.11
+sys 4.78
+
+As we can notice a pattern, the higher the number of threads, the
+faster the processes.

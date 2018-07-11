@@ -1,0 +1,105 @@
+For the comparison of time for the two versions of sfrob,
+
+The results are as follows
+
+For a small file, I used the command 
+
+time ./sfrob < bigfile.txt
+
+real 0m0.004s
+
+user 0m0.002s
+
+sys  0m0.001s
+
+For the unbuffered file,
+
+time ./sfrobu < bigfile.txt
+
+real  0m0.017s
+
+user  0m0.001s
+
+sys   0m0.008s
+
+Here as expected, the buffered file takes less time than the
+unbuffered version because it makes fewer system calls as seen by the
+sys row of the time and hence takes lesser time. Unbuffered version
+makes a system call everytime it reads or writes a byte. The buffered
+version forms a buffer with a large amount of characters and then just
+makes a system calls once.
+
+For a very large file,
+
+I used the command
+
+cat /usr/local/cs/jdk*/jre/lib/rt.jar | time -p ./sfrob | wc -l
+
+real 13.55
+
+user 7.09
+
+sys 6.45
+
+For the unbuffered version,
+
+cat /usr/local/cs/jdk*/jre/lib/rt.jar | time -p ./sfrobu | wc -l
+
+Comparisons: 10320132
+
+real 117.31
+
+user 11.47
+
+sys 105.82
+
+As seen again, the unbuffered version takes a long time. In my case
+this difference is very huge because I check for errors everytime
+memory is allocated or reallocated and for a big file that may take a
+lot of system calls.
+
+For different number of inputs and number of comparisons, I got
+
+Number of inputs	Comparisons
+5			7
+50			221
+500			3672
+5000			51646
+50000			665900
+
+
+By plotting this in excel and using a polynomial line, I got the
+equation
+
+Comparisons = 6E-05(inputs)^2 + 10.097x - 543.63
+
+
+The time command used on the three versions: buffered, unbuffered and
+shell commands gave us the following results:
+
+cat test1.txt | time -p ./sfrob | wc -l
+
+real 0.04
+user 0.03
+sys 0.00
+
+cat test1.txt | time -p ./sfrobu | wc -l
+
+Comparisons: 665900
+real 0.20
+user 0.04
+sys 0.15
+
+cat test1.txt | time -p ./sfrobs | wc -l
+real 0.03
+user 0.03
+sys 0.00
+
+
+Here test1.txt was a text file I created of a moderate size to test my
+code.
+
+We see that sfrobs i.e. our shell command script takes the least time
+as it makes no system calls and it is very optimum as there is direct
+conversion and sorting. The sfrob and sfrobu act in expected ways with
+sfrobu taking more time and making more system calls.

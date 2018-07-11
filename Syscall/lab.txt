@@ -1,0 +1,143 @@
+For the lab,
+
+For writing the code for the buffered part of the tr code, we use
+getchar to get characters one at a time and use putchar to display
+them. My code uses a program that takes 2 arguments: the first string
+is the from string and the second string is the to string. The
+characters in 'from' are the ones to be replaced by their
+corresponding character in 'to'. I use a loop to the end of a file
+taking one character at a time. Then we look if the character is a
+part of the from part of our input and if it is, we set it to the
+corresponding charecter from the to part of the input
+(string). Otherwise we just putchar the originally read character.
+
+For the unbuffered part, we just substitute the getchar and putchar
+with read and write. But we still compare one bit at a time.
+
+For comparing the amount of times system calls were made, we use
+strace commands.
+
+First we built the code again using 
+gcc -o tr2u tr2u.c
+gcc -o tr2b tr2b.c
+
+Then I used the coommand 
+
+dd if=/dev/zero of=bigfile.txt count=5000 bs=1000
+
+to create a 5MB file named bigfile.txt.
+
+Next I used the command,
+
+strace -c ./tr2b "abc" "def" < bigfile.txt > testoutput.txt
+
+that tests how many system calls the buffered version makes when the
+output is put to a file.
+
+This showed me that I had about 182 system calls by the code.
+
+I used the command 
+
+strace -c ./tr2u "abc" "def" < bigfile.txt > testoutput1.txt
+
+that tests how many system calls the unbuffered version makes when the
+output is put to a file.
+
+This showed me that I had about 10000024 system calls by the code.
+
+From these tests we find that as expected the unbuffered version makes
+way more system calls. This would make sense as getchar and putchar
+keep the characters and just make a system call once for all. Whereas
+the read and write commands perform a system call everytime they read
+or write bites.
+
+Similarly, for just using it on terminal,
+
+I used the command
+
+that tests how many system calls the buffered version makes when the
+output is put to a file.
+
+strace -c ./tr2b "abc" "def" < bigfile.txt
+
+that prints out the number of system calls made when the program runs
+on a really big file.
+
+This showed me that I had about 4988 system calls made by the code.
+
+Similarly for unbuffered version,
+
+strace -c ./tr2u "abc" "def" < bigfile.txt
+
+This showed me that I had about 10000024 system calls made by the code.
+
+These tests show us the same results as expected as explained
+above. Except the buffered version takes way more system calls because
+now since we are printing on terminal, there need to be way more
+system calls to be made.
+
+Finally, for the time tests,
+
+For the buffered verison for copying to a file,
+
+I used the command
+
+time ./tr2b "abc" "def" < bigfile.txt > o1.txt
+
+It printed the output
+
+real	   0m0.254s
+
+user	   0m0.177s
+
+sys	   0m0.007s
+
+
+For the unbuffered version for copying a file,
+
+I used 
+
+time ./tr2u "abc" "def" < bigfile.txt > o2.txt
+
+It outputs,
+
+real 0m5.116s
+
+user 0m0.359s
+
+sys  0m4.687s
+
+For the buffered version for printing to terminal
+
+I used the command
+
+time ./tr2b "abc" "def" < bigfile.txt 
+
+It printed,
+
+real 0m0.532s
+
+user 0m0.379s
+
+sys  0m0.011s
+
+For the unbuffered version for printing to terminal
+
+I used
+
+time ./tr2u "abc" "def" < bigfile.txt 
+
+which printed
+
+real 0m6.447s
+
+user 0m0.366s
+
+sys  0m6.076s
+
+
+As we see, the buffered verisons take much lesser time than the
+unbuffered code since lesser system calls are made. Again, the
+printing to terminal for buffered takes more time than copying to a
+file because more system calls need to be made to stdout.
+

@@ -1,0 +1,35 @@
+1.
+Even if the teams were monitoring the bits, the system would still
+be secure since only the encrypted bits would be visible since the
+public key is available to all users and teams. The private key on the
+other hand is only available to me and my partner and thus they would
+not be able to decrypt the information. Hence, the network is secure.
+
+(1)if other teams tapped into out keyboard, our network wouldn't be
+secure anymore since when we are asked for a passphrase (once or
+multiple times), we would type it in and it would show the passphrase
+which gives access to the private key. The passphrase could generate
+the private key that could be used to drcrypt the date encrypted by
+the public key (available to everyone).
+
+(2) if other teams had temporary access to the USB, they would also
+have access to my private key when it was generated. Since, they
+already have access to the public key and the encrypted meesage, the
+private key can be used to decrypt this message and the network isn't
+secure anymore.
+
+
+2.  gpg --verify doesn't actually verify that I created the file. All
+this command does is check if the detached signature of the files were
+matching. But if an outsider generates a key pair and has a name that
+is similar to mine with my e-mail id, it would still prove to be a
+"good signature" since the signature matches. This is bad because it
+doesn't check where the file comes from but just checks the signature.
+
+Solution:
+
+We can use CA (certificate authorization) that keeps track of where
+and who created the file. So instead of just checking the signatures,
+the certificates along with the signatures can be used to check the
+validity of the signature formed so that no outsider can manipulate
+it.

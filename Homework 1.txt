@@ -1,0 +1,119 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf130
+{\fonttbl\f0\fnil\fcharset0 Monaco;\f1\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red47\green189\blue29;\red0\green0\blue0;\red74\green0\blue255;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh18000\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 [1] This can be done using the -K option with man. For instance, man -K route will search all man commands for the word route.\
+[2] cp is located in /bin/cp and wc is located in /usr/bin/wc. This was done by using the whereis command in terminal.\
+[3] This was done using file . -name ? in /usr/bin\
+X, [ and w were the files found.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs22 \cf0 \CocoaLigature0 /usr/bin/w\
+/usr/bin/[\
+/usr/bin/X
+\f0\fs24 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 [4] /etc/alternatives/emacs\
+This was done by using the readlink command as readlink /usr/bin/emacs\
+[5] g+s is setgid which, on executable files gives the user the privileges of the group temporarily so that they can access it as the group.\
+o-x removes permission for others not in the group to run executables. \
+[6] the -mtime option. This would be used as:  find . -mtime 21\
+[7] find . -mtime 21 -type d \
+[8] In the directory of find: /usr/bin, using the command find . -type l which gives the following links:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\ri380\partightenfactor0
+\cf0 ./gimp\
+./latex\
+./hp-diagnose_plugin\
+./physe\
+./gmake\
+./slogin\
+./pnmcomp\
+./apt\
+./scrollkeeper-install\
+./rpmverify\
+./libpng-config\
+./lzgrep\
+./pdfxmltex\
+./reset\
+./odvips\
+./lzdiff\
+./paplay\
+./f95\
+./wsgen\
+./psfstriptable\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 and more\'85\
+There were a total of 350 such links.\
+[9] This was done using ls /usr/lib -t command\
+This resulted in the file \'93\cf2 \CocoaLigature0 libgamin-1.so.0.1.10\'94\
+\cf0 \CocoaLigature1 [10]\cf3 \CocoaLigature0  The locale command gets it data from the current environment. \cf2 \
+\cf0 \CocoaLigature1 [11]\cf3 \CocoaLigature0  This was done by entering Emacs and then using C-h d command and search sort\
+\cf0 Buffer-menu-sort              \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort the buffer menu by COLUMN.\
+Buffer-menu-sort-by-column    \ul M-x\ulnone  ... \ul RET\ulnone \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 Sort the buffer menu by the column clicked on.\
+ibuffer-invert-sorting        \ul M-x\ulnone  ... \ul RET\ulnone \
+Toggle whether or not sorting is in reverse order.\
+ibuffer-toggle-sorting-mode   \ul M-x\ulnone  ... \ul RET\ulnone \
+Toggle the current sorting mode.\
+rmail-sort-by-author          \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort messages of current Rmail buffer by author.\
+rmail-sort-by-correspondent   \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort messages of current Rmail buffer by other correspondent.\
+rmail-sort-by-date            \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort messages of current Rmail buffer by "Date" header.\
+rmail-sort-by-labels          \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort messages of current Rmail buffer by labels.\
+rmail-sort-by-lines           \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort messages of current Rmail buffer by the number of lines.\
+rmail-sort-by-recipient       \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort messages of current Rmail buffer by recipient.                                                             \
+rmail-sort-by-subject         \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort messages of current Rmail buffer by "Subject" header.\
+sort-columns                  \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort lines in region alphabetically by a certain range of columns.\
+sort-fields                   \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort lines in region lexicographically by the ARGth field of each line.\
+sort-lines                    \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort lines in region alphabetically; argument means descending order.\
+sort-numeric-fields           \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort lines in region numerically by the ARGth field of each line.\
+sort-pages                    \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort pages in region alphabetically; argument means descending order.\
+sort-paragraphs               \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort paragraphs in region alphabetically; argument means descending order.\
+sort-regexp-fields            \ul M-x\ulnone  ... \ul RET\ulnone \
+Sort the region lexicographically as specified by RECORD-REGEXP and KEY.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \CocoaLigature1 [12]\CocoaLigature0  \
+C-m-a: Go to the beginning of the current or previous define function (defun)\
+C-m-b: Go backwards towards the next balanced expression or sexp (s-expression)\
+C-m-c: Exit from the recursive edit\
+C-m-d: Go down a level of parenthesis \
+C-m-e: To go to the end of the current or the next defun\
+C-m-f: Go forwards towards the next balanced expression or sexp (s-expression)\
+C-m-g: Not set to do anything\
+C-m-h: To set a definite region around the current or next function\
+\CocoaLigature1 [13]\CocoaLigature0  The C-g command cancels a running program or gets rid of the current command that was typed.\
+\CocoaLigature1 [14]\CocoaLigature0  The yank command (C-y) is used to paste back text that was killed or removed.\
+\CocoaLigature1 [15]\CocoaLigature0  the fired command in emacs leads to 4 extra entries in the beginning: \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs22 \cf0 dr-xr-xr-x.   2 root root       90112 Sep 30 03:12 \cf4 .\cf0 \
+  drwxr-xr-x.  17 root root        4096 Jun 19  2012 \cf4 ..\cf0 \
+  -rw-r--r--.   1 root root          65 Aug 15  2011 .fipscheck.hmac\
+  -rw-r--r--    1 root root          65 Apr 26 04:06 .ssh.hmac\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 which are not a part of ls -l command in /usr/bin. Rest of the entries are the same.\
+\
+\
+\
+\
+\
+\
+}

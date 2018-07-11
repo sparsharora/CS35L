@@ -1,0 +1,139 @@
+First we download the coreutils source file by using the wget command
+as follows: wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-7.6.tar.gz
+
+Next, we extract the source file that we just downloaded using the
+command tar -xzvf coreutils-7.6.tar.gz
+
+No, to actually install coreutils, we first make a new directory to
+hold coreutils after it is installed. Lets name this directory
+coreutilsInstall. Use the command mkdir coreutilsInstall
+
+Next, we go into the directory that was made due to the extraction
+using cd coreutils-7.6
+
+After this, we read the INSTALL file in the directory and figure out
+that we have to use the command ./compile
+-—prefix=/u/cs/ugrad/arora/coreutilsInstall (found directory using
+command pwd)
+
+to have the coreutils-7.6 installed in the directory we made using the
+mkdir command.
+
+Next, we use the commands make and make install to compile and install
+coreutils into the directory.
+
+To reproduce the bug, we get into our directory that we made using cd
+coreutilsInstall
+
+The ls is stored in the bin so we go to the bin in the directory cd
+bin
+
+We change the locale by using the command export LC_ALL='en_US.UTF-8'
+
+Now, we reproduce the bug using ./ls -l which gives us the following
+output
+
+-rwxr-xr-x 1 arora csugrad 107251 2016-10-16 21:04 [
+-rwxr-xr-x 1 arora csugrad  97883 2016-10-16 21:04 base64
+-rwxr-xr-x 1 arora csugrad  75887 2016-10-16 21:04 basename
+-rwxr-xr-x 1 arora csugrad 172892 2016-10-16 21:04 cat
+-rwxr-xr-x 1 arora csugrad 204918 2016-10-16 21:04 chcon
+-rwxr-xr-x 1 arora csugrad 185427 2016-10-16 21:04 chgrp
+-rwxr-xr-x 1 arora csugrad 178542 2016-10-16 21:04 chmod
+-rwxr-xr-x 1 arora csugrad 192664 2016-10-16 21:04 chown
+-rwxr-xr-x 1 arora csugrad  95785 2016-10-16 21:04 chroot
+-rwxr-xr-x 1 arora csugrad  79176 2016-10-16 21:04 cksum
+-rwxr-xr-x 1 arora csugrad  90945 2016-10-16 21:04 comm
+-rwxr-xr-x 1 arora csugrad 432292 2016-10-16 21:04 cp
+-rwxr-xr-x 1 arora csugrad 404822 2016-10-16 21:04 csplit
+-rwxr-xr-x 1 arora csugrad 138060 2016-10-16 21:04 cut
+-rwxr-xr-x 1 arora csugrad 186677 2016-10-16 21:04 date
+-rwxr-xr-x 1 arora csugrad 175838 2016-10-16 21:04 dd
+-rwxr-xr-x 1 arora csugrad 252888 2016-10-16 21:04 df
+-rwxr-xr-x 1 arora csugrad 392455 2016-10-16 21:04 dir
+-rwxr-xr-x 1 arora csugrad  92459 2016-10-16 21:04 dircolors
+-rwxr-xr-x 1 arora csugrad  76418 2016-10-16 21:04 dirname
+-rwxr-xr-x 1 arora csugrad 363336 2016-10-16 21:04 du
+ (first few lines)
+
+ As we see, the date format is wrong.
+
+The right date format can be seen by using the command ls -l
+
+Now, we apply the patch
+
+For this, we go to the home directory using the cd command and enter
+the coreutils-7.6 directory
+
+Now, we create a new file called patch_file using emacs and paste the
+patch code that was provided to us.
+
+We use the command 
+patch -p1 < patch_file
+
+Here, we use the -p1 option because the address provided in the patch
+is “a/src/…” but we don’t have a directory called a that opens into
+src, so we use -p1 option so that the patch looks for “/src/“ in the
+current directory like we want it to.
+
+Now, we make.
+
+Finally, to test the output, we go into the src directory and use the
+command ./ls -l
+
+The output is :
+-rwxr-xr-x 1 arora csugrad 107251 Oct 16 21:03 [
+-rwxr-xr-x 1 arora csugrad  97883 Oct 16 21:04 base64
+-rw-r--r-- 1 arora csugrad   8422 Sep  1  2009 base64.c
+-rw-r--r-- 1 arora csugrad  26184 Oct 16 21:04 base64.o
+-rwxr-xr-x 1 arora csugrad  75887 Oct 16 21:04 basename
+-rw-r--r-- 1 arora csugrad   3787 Sep  1  2009 basename.c
+-rw-r--r-- 1 arora csugrad  13688 Oct 16 21:04 basename.o
+-rw-r--r-- 1 arora csugrad   5290 Sep  1  2009 c99-to-c89.diff
+-rwxr-xr-x 1 arora csugrad 172892 Oct 16 21:04 cat
+-rw-r--r-- 1 arora csugrad  22679 Sep  1  2009 cat.c
+-rw-r--r-- 1 arora csugrad  41768 Oct 16 21:04 cat.o
+-rwxr-xr-x 1 arora csugrad 204918 Oct 16 21:03 chcon
+-rw-r--r-- 1 arora csugrad  15766 Sep 10  2009 chcon.c
+-rw-r--r-- 1 arora csugrad  43304 Oct 16 21:03 chcon.o
+-rwxr-xr-x 1 arora csugrad 185427 Oct 16 21:03 chgrp
+-rw-r--r-- 1 arora csugrad   8864 Sep  1  2009 chgrp.c
+-rw-r--r-- 1 arora csugrad  25376 Oct 16 21:03 chgrp.o
+-rwxr-xr-x 1 arora csugrad 178542 Oct 16 21:03 chmod
+-rw-r--r-- 1 arora csugrad  15064 Sep 10  2009 chmod.c
+-rw-r--r-- 1 arora csugrad  40024 Oct 16 21:03 chmod.o
+-rwxr-xr-x 1 arora csugrad 192664 Oct 16 21:03 chown
+-rw-r--r-- 1 arora csugrad  10677 Sep  1  2009 chown.c
+-rw-r--r-- 1 arora csugrad  16157 Sep 10  2009 chown-core.c
+-rw-r--r-- 1 arora csugrad   2240 Sep  1  2009 chown-core.h
+-rw-r--r-- 1 arora csugrad  37344 Oct 16 21:03 chown-core.o
+-rw-r--r-- 1 arora csugrad  25488 Oct 16 21:03 chown.o
+-rwxr-xr-x 1 arora csugrad  95785 Oct 16 21:03 chroot
+
+(first few lines)
+
+which is the right output we need.
+
+We check the installed version of ls output by going back into our
+coreutilsInstall and running the ./ls -l command in bin.
+
+We get the same output as we did before.
+
+We can test these outputs on recently modified files by making a new
+file called test using emacs in the home directory We then use the
+command ./coreutils-7.6/src/ls -l ./test
+
+which prints:
+-rw-r--r-- 1 arora csugrad 8 Oct 16 21:48 ./test
+(right output)
+
+Similarly, we can try this with out old installed version of ls in
+coreutilsInstall
+
+To test on a year old version, we make test a year old by using the
+touch command as touch -t 201504100959.30 test
+
+which prints -rw-r--r-- 1 arora csugrad 8 Apr 10 2015 ./test
+
+which is the desired output.  We can try this on coreutilsInstall
+using the ls which shows the wrong date format.
